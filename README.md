@@ -2,7 +2,7 @@
 
 [![npm version](https://img.shields.io/npm/v/@charley-kim/react-unmanaged-portal.svg)](https://www.npmjs.com/package/@charley-kim/react-unmanaged-portal)
 [![bundle size](https://img.shields.io/bundlephobia/minzip/@charley-kim/react-unmanaged-portal)](https://bundlephobia.com/package/@charley-kim/react-unmanaged-portal)
-[![license](https://img.shields.io/npm/l/@charley-kim/react-unmanaged-portal.svg)](https://github.com/kickbelldev/react-portal-trick/blob/main/LICENSE)
+[![license](https://img.shields.io/npm/l/@charley-kim/react-unmanaged-portal.svg)](https://github.com/kickbelldev/react-unmanaged-portal/blob/main/LICENSE)
 
 A React portal library that leverages Unmanaged DOM to dynamically move portal content while preserving DOM instances.
 
