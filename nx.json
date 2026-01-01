@@ -11,6 +11,11 @@
     },
     "preview": {
       "dependsOn": ["^preview"]
+    },
+    "lint": {
+      "dependsOn": ["^lint"],
+      "cache": true,
+      "inputs": ["default", "{workspaceRoot}/eslint.config.js"]
     }
   },
   "namedInputs": {
@@ -43,5 +48,16 @@
         "watchDepsTargetName": "watch-deps"
       }
     }
-  ]
+  ],
+  "release": {
+    "projects": ["@kayce/react-unmanaged-portal"],
+    "version": {
+      "conventionalCommits": true
+    },
+    "changelog": {
+      "automaticFromRef": true,
+      "projectChangelogs": true,
+      "workspaceChangelog": false
+    }
+  }
 }

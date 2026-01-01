@@ -9,6 +9,30 @@
       "options": {
         "outputPath": "packages/react-unmanaged-portal/dist"
       }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "options": {
+        "lintFilePatterns": ["{projectRoot}/src/**/*.{ts,tsx}"],
+        "fix": true
+      }
+    }
+  },
+  "release": {
+    "version": {
+      "generator": "@nx/js:release-version",
+      "options": {}
+    },
+    "changelog": {
+      "generator": "@nx/js:release-changelog",
+      "options": {}
+    },
+    "publish": {
+      "executor": "@nx/js:release-publish",
+      "options": {
+        "manifestRootsToUpdate": ["packages/react-unmanaged-portal"],
+        "buildTarget": "@kayce/react-unmanaged-portal:build"
+      }
     }
   }
 }

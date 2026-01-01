@@ -21,6 +21,13 @@
       "options": {
         "buildTarget": "demo:build"
       }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "options": {
+        "lintFilePatterns": ["{projectRoot}/src/**/*.{ts,tsx}"],
+        "fix": true
+      }
     }
   }
 }
