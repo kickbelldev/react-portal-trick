@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "nx serve",
     "build": "tsc -b && nx vite:build",
-    "preview": "nx vite:preview"
+    "preview": "nx vite:preview",
+    "lint": "nx lint"
   },
   "dependencies": {
     "@kayce/react-unmanaged-portal": "workspace:*",
