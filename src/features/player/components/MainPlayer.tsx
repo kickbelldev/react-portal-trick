@@ -5,6 +5,8 @@ import { MainPortal } from '@/features/portal'
 
 import { usePlayerStore } from '../model/store'
 
+import { VideoControls } from './VideoControls'
+
 interface MainPlayerProps {
   src: string
 }
@@ -19,8 +21,9 @@ export function MainPlayer({ src }: MainPlayerProps) {
   }, [initVideo, src])
 
   return (
-    <div className="aspect-video max-w-4xl overflow-hidden rounded-lg bg-black">
+    <div className="max-w-4xl overflow-hidden rounded-lg bg-black">
       <MainPortal pathname={pathname} />
+      <VideoControls />
     </div>
   )
 }
