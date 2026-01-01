@@ -1,24 +1,30 @@
-import { create } from 'zustand'
+import { useSyncExternalStore } from 'react'
 
-const DEFAULT_PORTAL_ID = 'default'
+export const DEFAULT_PORTAL_ID = 'default'
 
-interface PortalInstance {
+export interface PortalInstance {
   targets: Map<string, HTMLElement>
   mode: string | null
   returnPath: string | null
 }
 
-interface PortalState {
-  portals: Map<string, PortalInstance>
+// Module-level state
+let portals = new Map<string, PortalInstance>()
+const listeners = new Set<() => void>()
+
+function emitChange() {
+  listeners.forEach((listener) => listener())
 }
 
-interface PortalActions {
-  getOrCreatePortal: (portalId: string) => PortalInstance
-  register: (portalId: string, mode: string, target: HTMLElement) => void
-  unregister: (portalId: string, mode: string) => void
-  setMode: (portalId: string, mode: string | null) => void
-  setReturnPath: (portalId: string, path: string | null) => void
-  resetPortal: (portalId: string) => void
+function getSnapshot() {
+  return portals
+}
+
+function subscribe(listener: () => void) {
+  listeners.add(listener)
+  return () => {
+    listeners.delete(listener)
+  }
 }
 
 const createEmptyInstance = (): PortalInstance => ({
@@ -27,69 +33,73 @@ const createEmptyInstance = (): PortalInstance => ({
   returnPath: null,
 })
 
-export const usePortalStore = create<PortalState & PortalActions>(
-  (set, get) => ({
-    portals: new Map(),
+// Actions
+export function getOrCreatePortal(portalId: string): PortalInstance {
+  const existing = portals.get(portalId)
+  if (existing) return existing
 
-    getOrCreatePortal: (portalId) => {
-      const existing = get().portals.get(portalId)
-      if (existing) return existing
+  const newInstance = createEmptyInstance()
+  portals = new Map(portals)
+  portals.set(portalId, newInstance)
+  emitChange()
+  return newInstance
+}
 
-      const newInstance = createEmptyInstance()
-      set((state) => {
-        const portals = new Map(state.portals)
-        portals.set(portalId, newInstance)
-        return { portals }
-      })
-      return newInstance
-    },
+export function register(
+  portalId: string,
+  mode: string,
+  target: HTMLElement,
+): void {
+  const instance = portals.get(portalId) ?? createEmptyInstance()
+  const targets = new Map(instance.targets)
+  targets.set(mode, target)
 
-    register: (portalId, mode, target) =>
-      set((state) => {
-        const portals = new Map(state.portals)
-        const instance = portals.get(portalId) ?? createEmptyInstance()
-        const targets = new Map(instance.targets)
-        targets.set(mode, target)
-        portals.set(portalId, { ...instance, targets })
-        return { portals }
-      }),
+  portals = new Map(portals)
+  portals.set(portalId, { ...instance, targets })
+  emitChange()
+}
 
-    unregister: (portalId, mode) =>
-      set((state) => {
-        const portals = new Map(state.portals)
-        const instance = portals.get(portalId)
-        if (!instance) return state
+export function unregister(portalId: string, mode: string): void {
+  const instance = portals.get(portalId)
+  if (!instance) return
 
-        const targets = new Map(instance.targets)
-        targets.delete(mode)
-        portals.set(portalId, { ...instance, targets })
-        return { portals }
-      }),
+  const targets = new Map(instance.targets)
+  targets.delete(mode)
 
-    setMode: (portalId, mode) =>
-      set((state) => {
-        const portals = new Map(state.portals)
-        const instance = portals.get(portalId) ?? createEmptyInstance()
-        portals.set(portalId, { ...instance, mode })
-        return { portals }
-      }),
+  portals = new Map(portals)
+  portals.set(portalId, { ...instance, targets })
+  emitChange()
+}
 
-    setReturnPath: (portalId, path) =>
-      set((state) => {
-        const portals = new Map(state.portals)
-        const instance = portals.get(portalId) ?? createEmptyInstance()
-        portals.set(portalId, { ...instance, returnPath: path })
-        return { portals }
-      }),
+export function setMode(portalId: string, mode: string | null): void {
+  const instance = portals.get(portalId) ?? createEmptyInstance()
 
-    resetPortal: (portalId) =>
-      set((state) => {
-        const portals = new Map(state.portals)
-        portals.set(portalId, createEmptyInstance())
-        return { portals }
-      }),
-  }),
-)
+  portals = new Map(portals)
+  portals.set(portalId, { ...instance, mode })
+  emitChange()
+}
 
-export { DEFAULT_PORTAL_ID }
-export type { PortalInstance }
+export function setReturnPath(portalId: string, path: string | null): void {
+  const instance = portals.get(portalId) ?? createEmptyInstance()
+
+  portals = new Map(portals)
+  portals.set(portalId, { ...instance, returnPath: path })
+  emitChange()
+}
+
+export function resetPortal(portalId: string): void {
+  const instance = portals.get(portalId)
+  if (!instance) return
+
+  portals = new Map(portals)
+  portals.set(portalId, createEmptyInstance())
+  emitChange()
+}
+
+// Hook
+export function usePortalStore<T>(
+  selector: (portals: Map<string, PortalInstance>) => T,
+): T {
+  const snapshot = useSyncExternalStore(subscribe, getSnapshot, getSnapshot)
+  return selector(snapshot)
+}
