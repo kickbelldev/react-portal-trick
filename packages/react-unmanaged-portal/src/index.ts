@@ -1,5 +1,8 @@
-export { PortalHost } from './PortalHost'
-export { PortalSlot } from './PortalSlot'
-export { usePortal } from './usePortal'
-export { usePortalStore, DEFAULT_PORTAL_ID } from './store'
-export type { PortalInstance } from './store'
+// Compound component pattern
+import { PortalHost } from './components/PortalHost'
+import { PortalSlot } from './components/PortalSlot'
+
+export const Portal = {
+  Host: PortalHost,
+  Slot: PortalSlot,
+} as const

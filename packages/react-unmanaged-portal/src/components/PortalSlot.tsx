@@ -5,11 +5,12 @@ import {
   type HTMLAttributes,
 } from 'react'
 
-import { DEFAULT_PORTAL_ID } from './store'
-import { usePortal } from './usePortal'
+import { DEFAULT_PORTAL_ID } from '../model/store'
+import { usePortal } from '../model/usePortal'
 
-interface PortalSlotProps<T extends keyof HTMLElementTagNameMap = 'div'>
-  extends HTMLAttributes<HTMLElementTagNameMap[T]> {
+interface PortalSlotProps<
+  T extends keyof HTMLElementTagNameMap = 'div',
+> extends HTMLAttributes<HTMLElementTagNameMap[T]> {
   portalId?: string
   mode: string
   as?: T
@@ -33,5 +34,7 @@ export function PortalSlot<T extends keyof HTMLElementTagNameMap = 'div'>({
   }, [mode, registerTarget, unregisterTarget])
 
   const container = as ?? 'div'
+
+  // eslint-disable-next-line react-hooks/refs
   return createElement(container, { ref: slotRef, ...props })
 }
