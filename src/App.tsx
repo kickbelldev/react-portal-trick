@@ -1,8 +1,7 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 
-import { VideoElement } from '@/features/player'
-import { MiniPlayer } from '@/features/player/components/MiniPlayer'
-import { PortalHost } from '@/features/portal/components/PortalHost'
+import { MiniPlayer, VideoElement } from '@/features/player'
+import { PortalHost } from '@/features/portal'
 
 import { RootLayout } from '@/layouts/RootLayout'
 

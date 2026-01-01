@@ -1,31 +1,65 @@
 import { create } from 'zustand'
 
-interface PlayerStore {
+interface PlayerState {
   videoRef: HTMLVideoElement | null
   src: string | null
   isPlaying: boolean
+  currentTime: number
+  duration: number
 }
 
 interface PlayerActions {
   setVideoRef: (ref: HTMLVideoElement | null) => void
   initVideo: (src: string) => void
-  setIsPlaying: (isPlaying: boolean) => void
+  togglePlay: () => void
+  seek: (time: number) => void
+  syncTime: (current: number, duration: number) => void
   reset: () => void
 }
-const initialState: PlayerStore = {
+
+const initialState: PlayerState = {
   videoRef: null,
   src: null,
   isPlaying: false,
+  currentTime: 0,
+  duration: 0,
 }
 
-export const usePlayerStore = create<PlayerStore & PlayerActions>(
-  (set) =>
+export const usePlayerStore = create<PlayerState & PlayerActions>(
+  (set, get) =>
     ({
       ...initialState,
 
       setVideoRef: (ref) => set({ videoRef: ref }),
-      initVideo: (src) => set({ src }),
-      setIsPlaying: (isPlaying) => set({ isPlaying }),
+
+      initVideo: (src) => set({ src, currentTime: 0, duration: 0 }),
+
+      togglePlay: () => {
+        const { videoRef, isPlaying } = get()
+        if (!videoRef) return
+
+        if (isPlaying) {
+          videoRef.pause()
+        } else {
+          videoRef.play()
+        }
+        set({ isPlaying: !isPlaying })
+      },
+
+      seek: (time) => {
+        const { videoRef } = get()
+        if (!videoRef) return
+
+        videoRef.currentTime = time
+        set({ currentTime: time })
+      },
+
+      syncTime: (current, duration) =>
+        set({
+          currentTime: current,
+          duration: Number.isNaN(duration) ? 0 : duration,
+        }),
+
       reset: () => set(initialState),
-    }) satisfies PlayerStore & PlayerActions,
+    }) satisfies PlayerState & PlayerActions,
 )

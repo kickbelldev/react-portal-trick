@@ -7,6 +7,7 @@ import { usePlayerStore } from '../model/store'
 export function VideoElement() {
   const setVideoRef = usePlayerStore((s) => s.setVideoRef)
   const src = usePlayerStore((s) => s.src)
+  const syncTime = usePlayerStore((s) => s.syncTime)
 
   return (
     <video
@@ -14,7 +15,15 @@ export function VideoElement() {
       src={src ?? undefined}
       playsInline
       controls
-      className="w-full object-contain aspect-video"
+      className="aspect-video w-full object-contain"
+      onTimeUpdate={(e) => {
+        const video = e.currentTarget
+        syncTime(video.currentTime, video.duration)
+      }}
+      onLoadedMetadata={(e) => {
+        const video = e.currentTarget
+        syncTime(0, video.duration)
+      }}
     />
   )
 }

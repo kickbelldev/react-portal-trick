@@ -1,4 +1,6 @@
+export { PortalHost } from './components/PortalHost'
 export { PortalSlot } from './components/PortalSlot'
 export { MainPortal } from './components/MainPortal'
 export { MiniPortal } from './components/MiniPortal'
+export { MiniPortalContainer } from './components/MiniPortalContainer'
 export { usePortalStore } from './model/store'
