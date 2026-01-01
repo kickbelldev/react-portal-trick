@@ -2,7 +2,7 @@ import {
   Portal,
   DEFAULT_PORTAL_ID,
   usePortal,
-} from '@kayce/react-unmanaged-portal'
+} from '@charley-kim/react-unmanaged-portal'
 import { useEffect } from 'react'
 
 interface MainPortalProps {

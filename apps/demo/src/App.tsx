@@ -1,4 +1,4 @@
-import { Portal } from '@kayce/react-unmanaged-portal'
+import { Portal } from '@charley-kim/react-unmanaged-portal'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 
 import { MiniPlayer, VideoElement } from '@/features/player'

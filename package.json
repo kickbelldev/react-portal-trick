@@ -1,12 +1,12 @@
 {
-  "name": "@kayce/video-portal-monorepo",
+  "name": "@charley-kim/video-portal-monorepo",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "nx run demo:dev",
     "build": "nx run-many --target=build --all",
-    "build:lib": "nx run @kayce/react-unmanaged-portal:build",
+    "build:lib": "nx run @charley-kim/react-unmanaged-portal:build",
     "test": "nx test",
     "release": "nx release",
     "lint": "nx run-many --target=lint --all",

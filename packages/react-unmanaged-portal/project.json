@@ -1,5 +1,5 @@
 {
-  "name": "@kayce/react-unmanaged-portal",
+  "name": "@charley-kim/react-unmanaged-portal",
   "sourceRoot": "packages/react-unmanaged-portal/src",
   "projectType": "library",
   "targets": {
@@ -31,7 +31,7 @@
       "executor": "@nx/js:release-publish",
       "options": {
         "manifestRootsToUpdate": ["packages/react-unmanaged-portal"],
-        "buildTarget": "@kayce/react-unmanaged-portal:build"
+        "buildTarget": "@charley-kim/react-unmanaged-portal:build"
       }
     }
   }

@@ -4,10 +4,10 @@ Unmanaged DOM을 활용한 React 포털 라이브러리와 데모 앱.
 
 ## 패키지
 
-| 패키지                                                               | 설명                     |
-| -------------------------------------------------------------------- | ------------------------ |
-| [`@kayce/react-unmanaged-portal`](./packages/react-unmanaged-portal) | 헤드리스 포털 라이브러리 |
-| [`demo`](./apps/demo)                                                | 비디오 플레이어 데모 앱  |
+| 패키지                                                                     | 설명                     |
+| -------------------------------------------------------------------------- | ------------------------ |
+| [`@charley-kim/react-unmanaged-portal`](./packages/react-unmanaged-portal) | 헤드리스 포털 라이브러리 |
+| [`demo`](./apps/demo)                                                      | 비디오 플레이어 데모 앱  |
 
 ## 빠른 시작
 
@@ -19,7 +19,7 @@ pnpm dev        # demo 앱 실행
 ## 사용법
 
 ```tsx
-import { Portal, usePortal } from '@kayce/react-unmanaged-portal'
+import { Portal, usePortal } from '@charley-kim/react-unmanaged-portal'
 
 function App() {
   return (

@@ -50,7 +50,7 @@
     }
   ],
   "release": {
-    "projects": ["@kayce/react-unmanaged-portal"],
+    "projects": ["@charley-kim/react-unmanaged-portal"],
     "version": {
       "conventionalCommits": true
     },
