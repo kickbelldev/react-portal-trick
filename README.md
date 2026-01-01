@@ -31,20 +31,20 @@ function App() {
 
       {/* Portal slots */}
       <div className="main-area">
-        <Portal.Slot mode="main" />
+        <Portal.Slot slotKey="main" />
       </div>
       <div className="mini-area">
-        <Portal.Slot mode="mini" />
+        <Portal.Slot slotKey="mini" />
       </div>
     </>
   )
 }
 
 function Controls() {
-  const { mode, setMode } = usePortal()
+  const { slotKey, setSlotKey } = usePortal()
 
   return (
-    <button onClick={() => setMode(mode === 'main' ? 'mini' : 'main')}>
+    <button onClick={() => setSlotKey(slotKey === 'main' ? 'mini' : 'main')}>
       Toggle
     </button>
   )
@@ -93,7 +93,7 @@ This library solves this problem by placing an **Unmanaged DOM node** (not manag
 │   │                    ┌───────────────┐                            │   │
 │   │                    │ externalStore │                            │   │
 │   │                    │ targets Map   │                            │   │
-│   │                    │ mode state    │                            │   │
+│   │                    │ slotKey state    │                            │   │
 │   │                    └───────────────┘                            │   │
 │   └─────────────────────────────────────────────────────────────────┘   │
 └─────────────────────────────────────────────────────────────────────────┘
@@ -105,7 +105,7 @@ This library solves this problem by placing an **Unmanaged DOM node** (not manag
 
 ```tsx
 // This causes the video to be recreated every time the target changes
-createPortal(<video />, mode === 'main' ? mainRef : miniRef)
+createPortal(<video />, slotKey === 'main' ? mainRef : miniRef)
 ```
 
 #### Benefits of Unmanaged DOM
@@ -148,19 +148,19 @@ A component that specifies where portal content should be rendered. It registers
 
 **Props:**
 
-| Prop       | Type                          | Default     | Description                   |
-| ---------- | ----------------------------- | ----------- | ----------------------------- |
-| `portalId` | `string`                      | `'default'` | Portal instance ID            |
-| `mode`     | `string`                      | -           | **Required** Target mode name |
-| `as`       | `keyof HTMLElementTagNameMap` | `'div'`     | Container element type        |
-| `...props` | `HTMLAttributes`              | -           | HTML element attributes       |
+| Prop       | Type                          | Default     | Description                      |
+| ---------- | ----------------------------- | ----------- | -------------------------------- |
+| `portalId` | `string`                      | `'default'` | Portal instance ID               |
+| `slotKey`  | `string`                      | -           | **Required** Target slotKey name |
+| `as`       | `keyof HTMLElementTagNameMap` | `'div'`     | Container element type           |
+| `...props` | `HTMLAttributes`              | -           | HTML element attributes          |
 
 **Example:**
 
 ```tsx
-<Portal.Slot mode="main" />
-<Portal.Slot mode="mini" className="mini-player" />
-<Portal.Slot mode="pip" as="section" id="pip-container" />
+<Portal.Slot slotKey="main" />
+<Portal.Slot slotKey="mini" className="mini-player" />
+<Portal.Slot slotKey="pip" as="section" id="pip-container" />
 ```
 
 ### Hooks
@@ -177,30 +177,30 @@ A hook that returns portal state and actions.
 
 **Returns:**
 
-| Property           | Type                                          | Description                                         |
-| ------------------ | --------------------------------------------- | --------------------------------------------------- |
-| `mode`             | `string \| null`                              | Currently active mode                               |
-| `returnPath`       | `string \| null`                              | Portal return path                                  |
-| `targets`          | `Map<string, HTMLElement>`                    | Map of all registered target modes and DOM elements |
-| `setMode`          | `(mode: string \| null) => void`              | Set mode                                            |
-| `setReturnPath`    | `(path: string \| null) => void`              | Set return path                                     |
-| `reset`            | `() => void`                                  | Reset portal state                                  |
-| `registerTarget`   | `(mode: string, target: HTMLElement) => void` | Manually register target (usually not needed)       |
-| `unregisterTarget` | `(mode: string) => void`                      | Manually unregister target (usually not needed)     |
+| Property           | Type                                             | Description                                            |
+| ------------------ | ------------------------------------------------ | ------------------------------------------------------ |
+| `slotKey`          | `string \| null`                                 | Currently active slotKey                               |
+| `returnPath`       | `string \| null`                                 | Portal return path                                     |
+| `targets`          | `Map<string, HTMLElement>`                       | Map of all registered target slotKeys and DOM elements |
+| `setSlotKey`       | `(slotKey: string \| null) => void`              | Set slotKey                                            |
+| `setReturnPath`    | `(path: string \| null) => void`                 | Set return path                                        |
+| `reset`            | `() => void`                                     | Reset portal state                                     |
+| `registerTarget`   | `(slotKey: string, target: HTMLElement) => void` | Manually register target (usually not needed)          |
+| `unregisterTarget` | `(slotKey: string) => void`                      | Manually unregister target (usually not needed)        |
 
 **Example:**
 
 ```tsx
 function VideoControls() {
-  const { mode, setMode, targets } = usePortal()
+  const { slotKey, setSlotKey, targets } = usePortal()
 
   return (
     <div>
-      <p>Current mode: {mode || 'none'}</p>
+      <p>Current slotKey: {slotKey || 'none'}</p>
       <p>Available targets: {Array.from(targets.keys()).join(', ')}</p>
-      <button onClick={() => setMode('main')}>Main</button>
-      <button onClick={() => setMode('mini')}>Mini</button>
-      <button onClick={() => setMode(null)}>Hide</button>
+      <button onClick={() => setSlotKey('main')}>Main</button>
+      <button onClick={() => setSlotKey('mini')}>Mini</button>
+      <button onClick={() => setSlotKey(null)}>Hide</button>
     </div>
   )
 }
@@ -224,7 +224,7 @@ import { DEFAULT_PORTAL_ID } from '@charley-kim/react-unmanaged-portal'
 import { Portal, usePortal } from '@charley-kim/react-unmanaged-portal'
 
 function VideoApp() {
-  const { mode, setMode } = usePortal()
+  const { slotKey, setSlotKey } = usePortal()
 
   return (
     <>
@@ -233,13 +233,13 @@ function VideoApp() {
       </Portal.Host>
 
       <main>
-        <Portal.Slot mode="main" />
-        <button onClick={() => setMode('mini')}>Minimize</button>
+        <Portal.Slot slotKey="main" />
+        <button onClick={() => setSlotKey('mini')}>Minimize</button>
       </main>
 
       <aside>
-        <Portal.Slot mode="mini" />
-        <button onClick={() => setMode('main')}>Maximize</button>
+        <Portal.Slot slotKey="mini" />
+        <button onClick={() => setSlotKey('main')}>Maximize</button>
       </aside>
     </>
   )
@@ -258,14 +258,14 @@ function App() {
       <Portal.Host portalId="video">
         <VideoElement />
       </Portal.Host>
-      <Portal.Slot portalId="video" mode="main" />
-      <Portal.Slot portalId="video" mode="mini" />
+      <Portal.Slot portalId="video" slotKey="main" />
+      <Portal.Slot portalId="video" slotKey="mini" />
 
       {/* Modal portal (completely independent) */}
       <Portal.Host portalId="modal">
         <ModalContent />
       </Portal.Host>
-      <Portal.Slot portalId="modal" mode="center" />
+      <Portal.Slot portalId="modal" slotKey="center" />
     </>
   )
 }
@@ -280,17 +280,17 @@ Use the `as` prop to specify the container element type:
   <video src="..." />
 </Portal.Host>
 
-<Portal.Slot mode="main" as="article" className="video-container" />
+<Portal.Slot slotKey="main" as="article" className="video-container" />
 ```
 
-### Custom Modes
+### Custom SlotKeys
 
-Modes can be freely defined:
+SlotKeys can be freely defined:
 
 ```tsx
-<Portal.Slot mode="pip" />       // Picture-in-Picture mode
-<Portal.Slot mode="theater" />   // Theater mode
-<Portal.Slot mode="fullscreen" />
+<Portal.Slot slotKey="pip" />       // Picture-in-Picture slotKey
+<Portal.Slot slotKey="theater" />   // Theater slotKey
+<Portal.Slot slotKey="fullscreen" />
 ```
 
 ### Usage with Routing
