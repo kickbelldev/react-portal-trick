@@ -333,35 +333,6 @@ function App() {
 }
 ```
 
-## Migration from v0.1.x
-
-v0.2.0 introduces a new type-safe API:
-
-```tsx
-// Before (v0.1.x)
-import { Portal, usePortal } from '@charley-kim/react-preserve-portal'
-
-<Portal.Host>
-  <video />
-</Portal.Host>
-<Portal.Slot slotKey="main" />
-
-const { setSlotKey } = usePortal()
-
-// After (v0.2.0)
-import { createPortal } from '@charley-kim/react-preserve-portal'
-
-const VideoPortal = createPortal({
-  id: 'video',
-  slots: ['main', 'mini'],
-} as const)
-
-<VideoPortal.Host node={<video />} />
-<VideoPortal.Slot slotKey="main" />
-
-const { setSlotKey } = VideoPortal.usePortal()
-```
-
 ## Requirements
 
 - React >= 18.0.0
