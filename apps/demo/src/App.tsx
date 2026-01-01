@@ -1,7 +1,7 @@
+import { Portal } from '@kayce/react-unmanaged-portal'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 
 import { MiniPlayer, VideoElement } from '@/features/player'
-import { PortalHost } from '@/features/portal'
 
 import { RootLayout } from '@/layouts/RootLayout'
 
@@ -20,9 +20,9 @@ function App() {
             <Route path="video/:id" element={<VideoPage />} />
           </Route>
         </Routes>
-        <PortalHost>
+        <Portal.Host>
           <VideoElement />
-        </PortalHost>
+        </Portal.Host>
         <MiniPlayer />
       </BrowserRouter>
     </>

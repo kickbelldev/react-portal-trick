@@ -1,5 +1,5 @@
-import { PortalSlot } from '@kayce/react-unmanaged-portal'
+import { Portal } from '@kayce/react-unmanaged-portal'
 
 export function MiniPortal() {
-  return <PortalSlot mode="mini" className="contents" />
+  return <Portal.Slot mode="mini" className="contents" />
 }

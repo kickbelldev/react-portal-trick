@@ -1,10 +1,9 @@
-import { useEffect } from 'react'
-
 import {
+  Portal,
   DEFAULT_PORTAL_ID,
-  PortalSlot,
   usePortal,
 } from '@kayce/react-unmanaged-portal'
+import { useEffect } from 'react'
 
 interface MainPortalProps {
   portalId?: string
@@ -24,5 +23,5 @@ export function MainPortal({
     return () => setMode('mini')
   }, [pathname, setMode, setReturnPath])
 
-  return <PortalSlot portalId={portalId} mode="main" className="contents" />
+  return <Portal.Slot mode="main" className="contents" />
 }
