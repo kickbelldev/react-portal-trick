@@ -16,6 +16,15 @@
       "dependsOn": ["^lint"],
       "cache": true,
       "inputs": ["default", "{workspaceRoot}/eslint.config.js"]
+    },
+    "test": {
+      "cache": true,
+      "inputs": [
+        "default",
+        "^default",
+        "{workspaceRoot}/vitest.config.ts",
+        "{projectRoot}/vitest.config.ts"
+      ]
     }
   },
   "namedInputs": {

@@ -21,7 +21,8 @@
   "scripts": {
     "build": "nx vite:build",
     "dev": "nx vite:build --watch",
-    "lint": "nx lint"
+    "lint": "nx lint",
+    "test": "nx test"
   },
   "peerDependencies": {
     "react": ">=18.0.0",
