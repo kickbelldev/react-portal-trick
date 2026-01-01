@@ -14,8 +14,8 @@ export function MiniPortalContainer({
   portalId = DEFAULT_PORTAL_ID,
   children,
 }: MiniPortalContainerProps) {
-  const { mode, returnPath, reset } = usePortal(portalId)
-  const isActive = mode === 'mini'
+  const { slotKey, returnPath, reset } = usePortal(portalId)
+  const isActive = slotKey === 'mini'
 
   if (!isActive) return null
 

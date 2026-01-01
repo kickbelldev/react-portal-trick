@@ -14,14 +14,14 @@ export function MainPortal({
   portalId = DEFAULT_PORTAL_ID,
   pathname,
 }: MainPortalProps) {
-  const { setReturnPath, setMode } = usePortal(portalId)
+  const { setReturnPath, setSlotKey } = usePortal(portalId)
 
   useEffect(() => {
     setReturnPath(pathname)
-    setMode('main')
+    setSlotKey('main')
 
-    return () => setMode('mini')
-  }, [pathname, setMode, setReturnPath])
+    return () => setSlotKey('mini')
+  }, [pathname, setSlotKey, setReturnPath])
 
-  return <Portal.Slot mode="main" className="contents" />
+  return <Portal.Slot slotKey="main" className="contents" />
 }
