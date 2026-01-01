@@ -4,7 +4,74 @@
 [![bundle size](https://img.shields.io/bundlephobia/minzip/@charley-kim/react-unmanaged-portal)](https://bundlephobia.com/package/@charley-kim/react-unmanaged-portal)
 [![license](https://img.shields.io/npm/l/@charley-kim/react-unmanaged-portal.svg)](https://github.com/kickbelldev/react-unmanaged-portal/blob/main/LICENSE)
 
-A React portal library that leverages Unmanaged DOM to dynamically move portal content while preserving DOM instances.
+A React portal library that leverages Unmanaged DOM to dynamically move portal content while **preserving the actual DOM instances**.
+
+## Core Concept: Unmanaged DOM Node
+
+React's `createPortal` alone cannot preserve DOM instances because it is bound to the React lifecycle. When the portal target changes, React unmounts the existing DOM and creates a new one.
+
+```tsx
+// This causes the video to be recreated every time the target changes
+createPortal(<video />, slotKey === 'main' ? mainRef : miniRef)
+```
+
+This library solves this problem by placing an **Unmanaged DOM node** (not managed by React) in between:
+
+```
+React -> createPortal -> Unmanaged Node (div) -> Slot targets
+                              |
+                    Outside React control
+                              |
+              Only uses appendChild/removeChild
+```
+
+This approach bypasses React's render-commit lifecycle, physically moving the DOM node.
+
+## Use Cases
+
+Useful for any DOM element where recreation is expensive or causes state loss:
+
+### Video / Audio Players
+
+- Playback position and buffer preserved
+- Network connections maintained
+- No re-loading or buffering when moving between slots
+
+### Canvas / WebGL
+
+- 3D scenes (Three.js, Babylon.js) don't need re-initialization
+- Game state preserved
+- WebGL context maintained (context loss is expensive)
+
+### Maps
+
+- Google Maps, Mapbox, Kakao Map instances preserved
+- Map position, zoom level, markers maintained
+- Avoids re-fetching map tiles
+
+### iframe
+
+- Embedded content state preserved
+- No page reload when moving
+- Login sessions in embedded widgets maintained
+
+### Rich Text Editors
+
+- Editor state (undo history, cursor position) preserved
+- Plugin initialization maintained
+- CKEditor, Quill, TipTap, etc.
+
+### Charts / Data Visualizations
+
+- D3, Chart.js, ECharts instances preserved
+- Animation states maintained
+- Avoids expensive re-rendering of large datasets
+
+### Third-party Widgets
+
+- Chat widgets, payment forms
+- SDK initialization preserved
+- User input state maintained
 
 ## Installation
 
@@ -77,74 +144,6 @@ setSlotKey('main')   // OK
 setSlotKey('wrong')  // TypeScript Error!
 ```
 
-## Core Concept: Unmanaged DOM Node
-
-React's `createPortal` alone cannot preserve DOM instances. When the portal target changes, React unmounts the existing DOM and creates a new one.
-
-This library solves this problem by placing an **Unmanaged DOM node** (not managed by React) in between:
-
-```
-React -> createPortal -> Unmanaged Node (div) -> Slot targets
-                              |
-                    Outside React control
-                              |
-              Only uses appendChild/removeChild
-```
-
-### Why This Approach?
-
-#### Limitations of Standard createPortal
-
-```tsx
-// This causes the video to be recreated every time the target changes
-createPortal(<video />, slotKey === 'main' ? mainRef : miniRef)
-```
-
-#### Benefits of Unmanaged DOM
-
-1. **Complete DOM Instance Preservation**: The video element never gets unmounted
-2. **State Preservation**: Playback position, buffer, network connections maintained
-3. **Independent of React**: Only uses appendChild/removeChild to change location
-
-## Use Cases
-
-This library is useful for any DOM element where recreation is expensive or causes state loss:
-
-### Video / Audio Players
-- Playback position and buffer preserved
-- Network connections maintained
-- No re-loading or buffering when moving between slots
-
-### Canvas / WebGL
-- 3D scenes (Three.js, Babylon.js) don't need re-initialization
-- Game state preserved
-- WebGL context maintained (context loss is expensive)
-
-### Maps
-- Google Maps, Mapbox, Kakao Map instances preserved
-- Map position, zoom level, markers maintained
-- Avoids re-fetching map tiles
-
-### iframe
-- Embedded content state preserved
-- No page reload when moving
-- Login sessions in embedded widgets maintained
-
-### Rich Text Editors
-- Editor state (undo history, cursor position) preserved
-- Plugin initialization maintained
-- CKEditor, Quill, TipTap, etc.
-
-### Charts / Data Visualizations
-- D3, Chart.js, ECharts instances preserved
-- Animation states maintained
-- Avoids expensive re-rendering of large datasets
-
-### Third-party Widgets
-- Chat widgets, payment forms
-- SDK initialization preserved
-- User input state maintained
-
 ## API
 
 ### `createPortal(options)`
@@ -153,20 +152,20 @@ Creates a typed portal instance.
 
 **Options:**
 
-| Option  | Type                     | Description                     |
-| ------- | ------------------------ | ------------------------------- |
-| `id`    | `string`                 | Unique portal identifier        |
-| `slots` | `readonly string[]`      | Array of valid slot keys        |
+| Option  | Type                | Description              |
+| ------- | ------------------- | ------------------------ |
+| `id`    | `string`            | Unique portal identifier |
+| `slots` | `readonly string[]` | Array of valid slot keys |
 
 **Returns:**
 
-| Property    | Type                                        | Description              |
-| ----------- | ------------------------------------------- | ------------------------ |
-| `id`        | `string`                                    | Portal ID                |
-| `slots`     | `readonly string[]`                         | Valid slot keys          |
-| `Host`      | `(props: HostProps) => ReactNode`           | Host component           |
-| `Slot`      | `(props: SlotProps) => ReactNode`           | Slot component           |
-| `usePortal` | `() => UsePortalReturn`                     | Portal hook              |
+| Property    | Type                              | Description     |
+| ----------- | --------------------------------- | --------------- |
+| `id`        | `string`                          | Portal ID       |
+| `slots`     | `readonly string[]`               | Valid slot keys |
+| `Host`      | `(props: HostProps) => ReactNode` | Host component  |
+| `Slot`      | `(props: SlotProps) => ReactNode` | Slot component  |
+| `usePortal` | `() => UsePortalReturn`           | Portal hook     |
 
 ### Host Component
 
@@ -192,11 +191,11 @@ Specifies where portal content should be rendered.
 
 **Props:**
 
-| Prop       | Type                          | Default | Description                        |
-| ---------- | ----------------------------- | ------- | ---------------------------------- |
-| `slotKey`  | `TSlot`                       | -       | **Required** Target slot (typed)   |
-| `as`       | `keyof HTMLElementTagNameMap` | `'div'` | Container element type             |
-| `...props` | `HTMLAttributes`              | -       | HTML element attributes            |
+| Prop       | Type                          | Default | Description                      |
+| ---------- | ----------------------------- | ------- | -------------------------------- |
+| `slotKey`  | `TSlot`                       | -       | **Required** Target slot (typed) |
+| `as`       | `keyof HTMLElementTagNameMap` | `'div'` | Container element type           |
+| `...props` | `HTMLAttributes`              | -       | HTML element attributes          |
 
 **Example:**
 
@@ -212,16 +211,16 @@ Returns portal state and actions with typed slot keys.
 
 **Returns:**
 
-| Property           | Type                                         | Description                     |
-| ------------------ | -------------------------------------------- | ------------------------------- |
-| `slotKey`          | `TSlot \| null`                              | Currently active slot (typed)   |
-| `returnPath`       | `string \| null`                             | Portal return path              |
-| `targets`          | `Map<TSlot, HTMLElement>`                    | Registered targets              |
-| `setSlotKey`       | `(key: TSlot \| null) => void`               | Set active slot (typed)         |
-| `setReturnPath`    | `(path: string \| null) => void`             | Set return path                 |
-| `reset`            | `() => void`                                 | Reset portal state              |
-| `registerTarget`   | `(slotKey: TSlot, target: HTMLElement) => void` | Manually register target     |
-| `unregisterTarget` | `(slotKey: TSlot) => void`                   | Manually unregister target      |
+| Property           | Type                                            | Description                   |
+| ------------------ | ----------------------------------------------- | ----------------------------- |
+| `slotKey`          | `TSlot \| null`                                 | Currently active slot (typed) |
+| `returnPath`       | `string \| null`                                | Portal return path            |
+| `targets`          | `Map<TSlot, HTMLElement>`                       | Registered targets            |
+| `setSlotKey`       | `(key: TSlot \| null) => void`                  | Set active slot (typed)       |
+| `setReturnPath`    | `(path: string \| null) => void`                | Set return path               |
+| `reset`            | `() => void`                                    | Reset portal state            |
+| `registerTarget`   | `(slotKey: TSlot, target: HTMLElement) => void` | Manually register target      |
+| `unregisterTarget` | `(slotKey: TSlot) => void`                      | Manually unregister target    |
 
 **Example:**
 
@@ -375,3 +374,7 @@ MIT
 ## Contributing
 
 Issues and PRs are welcome!
+
+---
+
+**Need more help?** If you'd like me to draft a more technical "Deep Dive" section or a specific guide for Next.js SSR, just let me know!
