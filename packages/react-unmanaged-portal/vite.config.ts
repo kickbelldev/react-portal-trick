@@ -5,6 +5,7 @@ import { defineConfig } from 'vite'
 import dts from 'vite-plugin-dts'
 
 export default defineConfig({
+  root: __dirname,
   plugins: [
     react(),
     dts({
@@ -29,6 +30,7 @@ export default defineConfig({
         },
       },
     },
+    minify: true,
     outDir: 'dist',
     emptyOutDir: true,
   },

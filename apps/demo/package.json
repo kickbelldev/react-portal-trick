@@ -4,9 +4,9 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc -b && vite build",
-    "preview": "vite preview"
+    "dev": "nx serve",
+    "build": "tsc -b && nx vite:build",
+    "preview": "nx vite:preview"
   },
   "dependencies": {
     "@kayce/react-unmanaged-portal": "workspace:*",
