@@ -2,7 +2,7 @@ import { useParams } from 'react-router-dom'
 
 import { MainPlayer } from '@/features/player'
 
-import { VIDEO_SOURCES } from '@/constants/VIDEO_SOURCES'
+import { VIDEO_SOURCES } from '@/shared/constants/VIDEO_SOURCES'
 
 export function VideoPage() {
   const { id } = useParams<{ id: string }>()
