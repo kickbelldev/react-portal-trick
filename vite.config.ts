@@ -8,9 +8,9 @@ import { defineConfig } from 'vite'
 export default defineConfig({
   plugins: [
     react({
-      // babel: {
-      //   plugins: [['babel-plugin-react-compiler']],
-      // },
+      babel: {
+        plugins: [['babel-plugin-react-compiler']],
+      },
     }),
     tailwindcss(),
   ],
