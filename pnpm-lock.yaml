@@ -79,7 +79,7 @@ importers:
     dependencies:
       '@charley-kim/react-preserve-portal':
         specifier: workspace:*
-        version: link:../../packages/react-preserved-portal
+        version: link:../../packages/react-preserve-portal
       '@tailwindcss/vite':
         specifier: ^4.1.18
         version: 4.1.18(vite@7.3.0(@types/node@24.10.4)(jiti@2.6.1)(lightningcss@1.30.2)(tsx@4.21.0)(yaml@2.8.2))
@@ -124,7 +124,7 @@ importers:
         specifier: ^7.2.4
         version: 7.3.0(@types/node@24.10.4)(jiti@2.6.1)(lightningcss@1.30.2)(tsx@4.21.0)(yaml@2.8.2)
 
-  packages/react-preserved-portal:
+  packages/react-preserve-portal:
     devDependencies:
       '@testing-library/jest-dom':
         specifier: ^6.6.3
