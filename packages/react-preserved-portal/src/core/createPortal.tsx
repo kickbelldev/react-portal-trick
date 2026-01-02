@@ -1,15 +1,6 @@
-import { useCallback, useMemo } from 'react'
-
 import { InternalPortalHost } from '../components/InternalPortalHost'
 import { InternalPortalSlot } from '../components/InternalPortalSlot'
-import {
-  usePortalStore,
-  register,
-  unregister,
-  setSlotKey as setSlotKeyAction,
-  setReturnPath as setReturnPathAction,
-  resetPortal as resetPortalAction,
-} from '../model/store'
+import { usePortal } from '../model/usePortal'
 
 import type {
   CreatePortalOptions,
@@ -42,48 +33,8 @@ export function createPortal<
   }
 
   const useTypedPortal = (): UsePortalReturn<TSlot> => {
-    const portal = usePortalStore((portals) => portals.get(id))
-
-    const slotKey = (portal?.slotKey ?? null) as TSlot | null
-    const returnPath = portal?.returnPath ?? null
-    const targets = useMemo(
-      () => (portal?.targets ?? new Map()) as Map<TSlot, HTMLElement>,
-      [portal?.targets],
-    )
-
-    const setSlotKey = useCallback(
-      (newSlotKey: TSlot | null) => setSlotKeyAction(id, newSlotKey),
-      [],
-    )
-
-    const setReturnPath = useCallback(
-      (path: string | null) => setReturnPathAction(id, path),
-      [],
-    )
-
-    const reset = useCallback(() => resetPortalAction(id), [])
-
-    const registerTarget = useCallback(
-      (targetSlotKey: TSlot, target: HTMLElement) =>
-        register(id, targetSlotKey, target),
-      [],
-    )
-
-    const unregisterTarget = useCallback(
-      (targetSlotKey: TSlot) => unregister(id, targetSlotKey),
-      [],
-    )
-
-    return {
-      slotKey,
-      returnPath,
-      targets,
-      setSlotKey,
-      setReturnPath,
-      reset,
-      registerTarget,
-      unregisterTarget,
-    }
+    const result = usePortal(id)
+    return result as UsePortalReturn<TSlot>
   }
 
   return {
