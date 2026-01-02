@@ -1,8 +1,8 @@
 # @charley-kim/react-preserve-portal
 
-[![npm version](https://img.shields.io/npm/v/@charley-kim/react-preserve-portal.svg)](https://www.npmjs.com/package/@charley-kim/react-preserve-portal)
+[![npm version](https://img.shields.io/npm/v/@charley-kim/react-preserve-portal)](https://www.npmjs.com/package/@charley-kim/react-preserve-portal)
 [![bundle size](https://img.shields.io/bundlephobia/minzip/@charley-kim/react-preserve-portal)](https://bundlephobia.com/package/@charley-kim/react-preserve-portal)
-[![license](https://img.shields.io/npm/l/@charley-kim/react-preserve-portal.svg)](https://github.com/kickbelldev/react-preserve-portal/blob/main/LICENSE)
+[![license](https://img.shields.io/github/license/kickbelldev/react-preserve-portal)](https://github.com/kickbelldev/react-preserve-portal/blob/main/LICENSE)
 
 A React portal library that leverages Unmanaged DOM to dynamically move portal content while **preserving the actual DOM instances**.
 
