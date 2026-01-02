@@ -9,7 +9,7 @@ describe('InternalPortalHost', () => {
     resetPortal('default')
   })
 
-  it('기본 포털 ID로 렌더링', () => {
+  it('renders with default portal ID', () => {
     const target = document.createElement('div')
     document.body.appendChild(target)
 
@@ -26,7 +26,7 @@ describe('InternalPortalHost', () => {
     document.body.removeChild(target)
   })
 
-  it('커스텀 포털 ID로 렌더링', () => {
+  it('renders with custom portal ID', () => {
     const target = document.createElement('div')
     document.body.appendChild(target)
 
@@ -45,7 +45,7 @@ describe('InternalPortalHost', () => {
     document.body.removeChild(target)
   })
 
-  it('커스텀 컨테이너 태그로 렌더링', () => {
+  it('renders with custom container tag', () => {
     const target = document.createElement('div')
     document.body.appendChild(target)
 
@@ -64,22 +64,22 @@ describe('InternalPortalHost', () => {
     document.body.removeChild(target)
   })
 
-  it('슬롯 키가 설정되지 않으면 렌더링되지 않음', () => {
+  it('does not render when slot key is not set', () => {
     const target = document.createElement('div')
     document.body.appendChild(target)
 
     register('default', 'main', target)
-    // setSlotKey를 호출하지 않음
+    // setSlotKey is not called
 
     render(<InternalPortalHost node={<div>Should Not Render</div>} />)
 
-    // 포털이 타겟에 연결되지 않았으므로 body에 직접 렌더링되지 않음
+    // Portal is not connected to target, so it's not rendered to body
     expect(screen.queryByText('Should Not Render')).not.toBeInTheDocument()
 
     document.body.removeChild(target)
   })
 
-  it('슬롯 키가 변경되면 새로운 타겟으로 이동', async () => {
+  it('moves to new target when slot key changes', async () => {
     const target1 = document.createElement('div')
     const target2 = document.createElement('div')
     target1.id = 'target1'
@@ -113,7 +113,7 @@ describe('InternalPortalHost', () => {
     document.body.removeChild(target2)
   })
 
-  it('언마운트 시 DOM에서 제거', () => {
+  it('removes from DOM on unmount', () => {
     const target = document.createElement('div')
     document.body.appendChild(target)
 
@@ -133,7 +133,7 @@ describe('InternalPortalHost', () => {
     document.body.removeChild(target)
   })
 
-  it('여러 InternalPortalHost가 같은 포털을 사용할 수 있음', () => {
+  it('allows multiple InternalPortalHost to use same portal', () => {
     const target = document.createElement('div')
     document.body.appendChild(target)
 

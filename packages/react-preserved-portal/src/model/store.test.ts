@@ -11,8 +11,8 @@ import {
 
 describe('store', () => {
   beforeEach(() => {
-    // 각 테스트 전에 포털 상태 초기화
-    // 테스트에서 사용한 포털 ID들을 리셋
+    // Reset portal state before each test
+    // Reset portal IDs used in tests
     resetPortal('test-portal')
     resetPortal('new-portal')
     resetPortal('portal1')
@@ -20,13 +20,13 @@ describe('store', () => {
   })
 
   describe('DEFAULT_PORTAL_ID', () => {
-    it('기본 포털 ID가 올바른지 확인', () => {
+    it('has correct default portal ID', () => {
       expect(DEFAULT_PORTAL_ID).toBe('default')
     })
   })
 
   describe('getOrCreatePortal', () => {
-    it('존재하지 않는 포털 ID로 호출하면 새 인스턴스를 생성', () => {
+    it('creates new instance for non-existent portal ID', () => {
       const instance = getOrCreatePortal('test-portal')
       expect(instance).toEqual({
         targets: new Map(),
@@ -35,7 +35,7 @@ describe('store', () => {
       })
     })
 
-    it('이미 존재하는 포털 ID로 호출하면 기존 인스턴스를 반환', () => {
+    it('returns existing instance for existing portal ID', () => {
       const instance1 = getOrCreatePortal('test-portal')
       instance1.slotKey = 'test-slotKey'
       const instance2 = getOrCreatePortal('test-portal')
@@ -44,7 +44,7 @@ describe('store', () => {
   })
 
   describe('register', () => {
-    it('새로운 타겟을 등록', () => {
+    it('registers new target', () => {
       const target = document.createElement('div')
       register('test-portal', 'test-slotKey', target)
 
@@ -52,7 +52,7 @@ describe('store', () => {
       expect(instance.targets.get('test-slotKey')).toBe(target)
     })
 
-    it('같은 슬롯 키에 다른 타겟을 등록하면 덮어쓰기', () => {
+    it('overwrites when registering different target to same slot key', () => {
       const target1 = document.createElement('div')
       const target2 = document.createElement('div')
 
@@ -64,7 +64,7 @@ describe('store', () => {
       expect(instance.targets.size).toBe(1)
     })
 
-    it('여러 슬롯 키를 등록할 수 있음', () => {
+    it('registers multiple slot keys', () => {
       const target1 = document.createElement('div')
       const target2 = document.createElement('div')
 
@@ -79,7 +79,7 @@ describe('store', () => {
   })
 
   describe('unregister', () => {
-    it('등록된 타겟을 제거', () => {
+    it('removes registered target', () => {
       const target = document.createElement('div')
       register('test-portal', 'test-slotKey', target)
       unregister('test-portal', 'test-slotKey')
@@ -88,13 +88,13 @@ describe('store', () => {
       expect(instance.targets.has('test-slotKey')).toBe(false)
     })
 
-    it('존재하지 않는 포털에서 제거 시도해도 에러가 발생하지 않음', () => {
+    it('does not throw when removing from non-existent portal', () => {
       expect(() => {
         unregister('non-existent', 'test-slotKey')
       }).not.toThrow()
     })
 
-    it('존재하지 않는 슬롯 키를 제거 시도해도 에러가 발생하지 않음', () => {
+    it('does not throw when removing non-existent slot key', () => {
       register('test-portal', 'slotKey1', document.createElement('div'))
       expect(() => {
         unregister('test-portal', 'non-existent')
@@ -103,20 +103,20 @@ describe('store', () => {
   })
 
   describe('setSlotKey', () => {
-    it('포털 슬롯 키를 설정', () => {
+    it('sets portal slot key', () => {
       setSlotKey('test-portal', 'test-slotKey')
       const instance = getOrCreatePortal('test-portal')
       expect(instance.slotKey).toBe('test-slotKey')
     })
 
-    it('슬롯 키를 null로 설정 가능', () => {
+    it('sets slot key to null', () => {
       setSlotKey('test-portal', 'test-slotKey')
       setSlotKey('test-portal', null)
       const instance = getOrCreatePortal('test-portal')
       expect(instance.slotKey).toBeNull()
     })
 
-    it('존재하지 않는 포털에 슬롯 키를 설정하면 새 인스턴스 생성', () => {
+    it('creates new instance when setting slot key to non-existent portal', () => {
       setSlotKey('new-portal', 'new-slotKey')
       const instance = getOrCreatePortal('new-portal')
       expect(instance.slotKey).toBe('new-slotKey')
@@ -124,20 +124,20 @@ describe('store', () => {
   })
 
   describe('setReturnPath', () => {
-    it('리턴 경로를 설정', () => {
+    it('sets return path', () => {
       setReturnPath('test-portal', '/test-path')
       const instance = getOrCreatePortal('test-portal')
       expect(instance.returnPath).toBe('/test-path')
     })
 
-    it('리턴 경로를 null로 설정 가능', () => {
+    it('sets return path to null', () => {
       setReturnPath('test-portal', '/test-path')
       setReturnPath('test-portal', null)
       const instance = getOrCreatePortal('test-portal')
       expect(instance.returnPath).toBeNull()
     })
 
-    it('존재하지 않는 포털에 리턴 경로를 설정하면 새 인스턴스 생성', () => {
+    it('creates new instance when setting return path to non-existent portal', () => {
       setReturnPath('new-portal', '/new-path')
       const instance = getOrCreatePortal('new-portal')
       expect(instance.returnPath).toBe('/new-path')
@@ -145,7 +145,7 @@ describe('store', () => {
   })
 
   describe('resetPortal', () => {
-    it('포털 인스턴스를 초기 상태로 리셋', () => {
+    it('resets portal instance to initial state', () => {
       const target = document.createElement('div')
       register('test-portal', 'test-slotKey', target)
       setSlotKey('test-portal', 'test-slotKey')
@@ -159,7 +159,7 @@ describe('store', () => {
       expect(instance.returnPath).toBeNull()
     })
 
-    it('존재하지 않는 포털을 리셋해도 에러가 발생하지 않음', () => {
+    it('does not throw when resetting non-existent portal', () => {
       expect(() => {
         resetPortal('non-existent')
       }).not.toThrow()
@@ -167,7 +167,7 @@ describe('store', () => {
   })
 
   describe('usePortalStore', () => {
-    it('getOrCreatePortal을 통해 등록된 데이터를 확인할 수 있음', () => {
+    it('verifies registered data via getOrCreatePortal', () => {
       const target = document.createElement('div')
       register('test-portal', 'test-slotKey', target)
 
@@ -175,7 +175,7 @@ describe('store', () => {
       expect(instance.targets.get('test-slotKey')).toBe(target)
     })
 
-    it('여러 포털을 독립적으로 관리할 수 있음', () => {
+    it('manages multiple portals independently', () => {
       const target1 = document.createElement('div')
       const target2 = document.createElement('div')
 

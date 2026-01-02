@@ -9,7 +9,7 @@ describe('InternalPortalSlot', () => {
     resetPortal('default')
   })
 
-  it('기본 포털 ID로 렌더링', () => {
+  it('renders with default portal ID', () => {
     const { container } = render(<InternalPortalSlot slotKey="main" />)
 
     const element = container.firstChild as HTMLElement
@@ -20,7 +20,7 @@ describe('InternalPortalSlot', () => {
     expect(instance.targets.get('main')).toBe(element)
   })
 
-  it('커스텀 포털 ID로 렌더링', () => {
+  it('renders with custom portal ID', () => {
     const { container } = render(
       <InternalPortalSlot portalId="custom-portal" slotKey="main" />,
     )
@@ -32,7 +32,7 @@ describe('InternalPortalSlot', () => {
     expect(instance.targets.get('main')).toBe(element)
   })
 
-  it('커스텀 컨테이너 태그로 렌더링', () => {
+  it('renders with custom container tag', () => {
     const { container } = render(
       <InternalPortalSlot slotKey="main" as="section" />,
     )
@@ -44,7 +44,7 @@ describe('InternalPortalSlot', () => {
     expect(instance.targets.get('main')).toBe(element)
   })
 
-  it('HTML 속성을 전달할 수 있음', () => {
+  it('passes HTML attributes', () => {
     const { container } = render(
       <InternalPortalSlot
         slotKey="main"
@@ -60,7 +60,7 @@ describe('InternalPortalSlot', () => {
     expect(element.getAttribute('data-testid')).toBe('test-slot')
   })
 
-  it('슬롯 키가 변경되면 타겟이 업데이트됨', () => {
+  it('updates target when slot key changes', () => {
     const { container, rerender } = render(
       <InternalPortalSlot slotKey="slotKey1" />,
     )
@@ -77,7 +77,7 @@ describe('InternalPortalSlot', () => {
     expect(instance2.targets.get('slotKey2')).toBe(element2)
   })
 
-  it('언마운트 시 타겟이 제거됨', () => {
+  it('removes target on unmount', () => {
     const { container, unmount } = render(
       <InternalPortalSlot slotKey="main" />,
     )
@@ -92,7 +92,7 @@ describe('InternalPortalSlot', () => {
     expect(instanceAfter.targets.has('main')).toBe(false)
   })
 
-  it('여러 InternalPortalSlot이 다른 슬롯 키로 등록됨', () => {
+  it('registers multiple InternalPortalSlot with different slot keys', () => {
     const { container: container1 } = render(
       <InternalPortalSlot slotKey="slotKey1" />,
     )
@@ -109,7 +109,7 @@ describe('InternalPortalSlot', () => {
     expect(instance.targets.size).toBe(2)
   })
 
-  it('같은 슬롯 키로 여러 InternalPortalSlot을 렌더링하면 마지막 것이 등록됨', () => {
+  it('registers last one when multiple InternalPortalSlot use same slot key', () => {
     const { unmount: unmount1 } = render(
       <InternalPortalSlot slotKey="main" id="slot1" />,
     )
@@ -120,19 +120,19 @@ describe('InternalPortalSlot', () => {
     const element2 = container2.firstChild as HTMLElement
 
     const instance = getOrCreatePortal('default')
-    // 두 번째가 나중에 렌더링되어 마지막 것이 등록됨
+    // Second one is rendered later, so it's registered
     expect(instance.targets.get('main')).toBe(element2)
 
     unmount1()
 
-    // 첫 번째가 언마운트되면 cleanup으로 'main' 슬롯 키가 제거됨
-    // 두 번째 InternalPortalSlot은 여전히 마운트되어 있지만,
-    // useLayoutEffect가 다시 실행되지 않으므로 다시 등록되지 않음
+    // When first one unmounts, cleanup removes 'main' slot key
+    // Second InternalPortalSlot is still mounted, but
+    // useLayoutEffect doesn't re-run, so it's not re-registered
     const instanceAfter = getOrCreatePortal('default')
     expect(instanceAfter.targets.has('main')).toBe(false)
   })
 
-  it('다른 포털 ID로 여러 InternalPortalSlot을 독립적으로 관리', () => {
+  it('manages multiple InternalPortalSlot with different portal IDs independently', () => {
     const { container: container1 } = render(
       <InternalPortalSlot portalId="portal1" slotKey="main" />,
     )

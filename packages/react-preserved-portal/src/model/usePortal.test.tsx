@@ -9,7 +9,7 @@ describe('usePortal', () => {
     resetPortal('default')
   })
 
-  it('기본 포털 ID로 훅을 사용할 수 있음', () => {
+  it('uses hook with default portal ID', () => {
     const { result } = renderHook(() => usePortal())
 
     expect(result.current.slotKey).toBeNull()
@@ -22,14 +22,14 @@ describe('usePortal', () => {
     expect(typeof result.current.unregisterTarget).toBe('function')
   })
 
-  it('커스텀 포털 ID로 훅을 사용할 수 있음', () => {
+  it('uses hook with custom portal ID', () => {
     const { result } = renderHook(() => usePortal('custom-portal'))
 
     expect(result.current.slotKey).toBeNull()
     expect(result.current.returnPath).toBeNull()
   })
 
-  it('setSlotKey로 슬롯 키를 설정할 수 있음', () => {
+  it('sets slot key with setSlotKey', () => {
     const { result } = renderHook(() => usePortal('test-portal'))
 
     act(() => {
@@ -39,7 +39,7 @@ describe('usePortal', () => {
     expect(result.current.slotKey).toBe('test-slotKey')
   })
 
-  it('setSlotKey로 슬롯 키를 null로 설정할 수 있음', () => {
+  it('sets slot key to null with setSlotKey', () => {
     const { result } = renderHook(() => usePortal('test-portal'))
 
     act(() => {
@@ -50,7 +50,7 @@ describe('usePortal', () => {
     expect(result.current.slotKey).toBeNull()
   })
 
-  it('setReturnPath로 리턴 경로를 설정할 수 있음', () => {
+  it('sets return path with setReturnPath', () => {
     const { result } = renderHook(() => usePortal('test-portal'))
 
     act(() => {
@@ -60,7 +60,7 @@ describe('usePortal', () => {
     expect(result.current.returnPath).toBe('/test-path')
   })
 
-  it('setReturnPath로 리턴 경로를 null로 설정할 수 있음', () => {
+  it('sets return path to null with setReturnPath', () => {
     const { result } = renderHook(() => usePortal('test-portal'))
 
     act(() => {
@@ -71,7 +71,7 @@ describe('usePortal', () => {
     expect(result.current.returnPath).toBeNull()
   })
 
-  it('reset으로 포털을 초기화할 수 있음', () => {
+  it('resets portal with reset', () => {
     const { result } = renderHook(() => usePortal('test-portal'))
 
     act(() => {
@@ -85,7 +85,7 @@ describe('usePortal', () => {
     expect(result.current.targets.size).toBe(0)
   })
 
-  it('registerTarget으로 타겟을 등록할 수 있음', () => {
+  it('registers target with registerTarget', () => {
     const { result } = renderHook(() => usePortal('test-portal'))
     const target = document.createElement('div')
 
@@ -96,7 +96,7 @@ describe('usePortal', () => {
     expect(result.current.targets.get('test-slotKey')).toBe(target)
   })
 
-  it('unregisterTarget으로 타겟을 제거할 수 있음', () => {
+  it('removes target with unregisterTarget', () => {
     const { result } = renderHook(() => usePortal('test-portal'))
     const target = document.createElement('div')
 
@@ -108,7 +108,7 @@ describe('usePortal', () => {
     expect(result.current.targets.has('test-slotKey')).toBe(false)
   })
 
-  it('외부에서 등록된 타겟을 감지할 수 있음', () => {
+  it('detects externally registered target', () => {
     const { result } = renderHook(() => usePortal('test-portal'))
     const target = document.createElement('div')
 
@@ -119,7 +119,7 @@ describe('usePortal', () => {
     expect(result.current.targets.get('external-slotKey')).toBe(target)
   })
 
-  it('여러 타겟을 등록하고 관리할 수 있음', () => {
+  it('registers and manages multiple targets', () => {
     const { result } = renderHook(() => usePortal('test-portal'))
     const target1 = document.createElement('div')
     const target2 = document.createElement('div')
@@ -134,7 +134,7 @@ describe('usePortal', () => {
     expect(result.current.targets.get('slotKey2')).toBe(target2)
   })
 
-  it('포털 ID가 변경되면 다른 포털 인스턴스를 참조', () => {
+  it('references different portal instance when portal ID changes', () => {
     const { result, rerender } = renderHook(
       ({ portalId }) => usePortal(portalId),
       {
